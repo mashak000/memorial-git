@@ -1,0 +1,15 @@
+.listik{
+    width: 200px;
+    height:200px;
+}
+
+.list{
+    width: 200px;
+    height: 200px;
+}
+
+
+
+.listik.draging{
+    opacity: 0.5;
+}
