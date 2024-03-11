@@ -1,0 +1,5 @@
+.DS_Store
+.csv
+rename.py
+.env
+__pycache__
