@@ -1,15 +1,238 @@
-.listik{
-    width: 200px;
-    height:200px;
-}
-
-.list{
-    width: 200px;
-    height: 200px;
-}
-
-
-
-.listik.draging{
+.loader {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    position: relative;
+    background: rgba(255, 255, 255, 0.8);
+  }
+  .loader:before , .loader:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #FFF;
+    animation: slide 1s infinite linear alternate;
     opacity: 0.5;
+  }
+  .loader:after {
+    animation: slide2 1s infinite linear alternate;
+    opacity: 1;
+
+  }
+  @keyframes slide {
+    0% , 20% {  transform: translate(0, 0)  }
+    80% , 100% { transform: translate(15px, 15px) }
+  }
+  @keyframes slide2 {
+    0% , 20% {  transform: translate(0, 0) }
+    80% , 100% { transform: translate(-15px, -15px) }
+  }
+
+
+body{
+    background-color: black;
+}
+.list{
+    width: 30px;
+}
+
+@keyframes glowing{
+    0%{
+        opacity:100%;
+    }
+    50%{
+        opacity:0%;
+    }
+    100%{
+        opacity: 100%;
+    }
+}
+
+.info-dblclick{
+    color:white;
+    margin-bottom: 10px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    animation-name: glowing;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+.info-wrapper{
+    width: 100px;
+}
+
+p{
+    font-size:small;
+}
+
+.mmodal{
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    border: 1px solid white;
+    border-radius: 10pt;
+    z-index: 9999;
+    background-color: black;
+    color: white;
+    padding: 20px;
+}
+
+.mmodal.active{
+    transform: translate(-50%, -50%) scale(1);
+  
+}
+
+.mmodal-header{
+    display: flex;
+    justify-content: end;
+}
+.mmodal-body{
+    padding-top: 10px;
+}
+
+.close{
+    background: none;
+    border: none;
+    font-size: large;
+    font-weight: bold;
+    color: white;
+}
+.close:hover{
+    color: white;
+}
+
+.info-trigger{
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px;
+}
+.info-trigger:hover{
+    color: grey;
+    transition: 200ms;
+    cursor:pointer;
+}
+.info-trigger.active{
+    color: grey;
+}
+
+.close:focus {
+    outline: none;
+    box-shadow: none;
+}
+#overlay{
+    position: fixed;
+    top: 0;
+    left:0;
+    right: 0;
+    bottom:0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, .5);
+    pointer-events: none;
+    transition: 200ms;
+}
+#overlay.active{
+    opacity: 1;
+    pointer-events: all;
+}
+
+button{
+    cursor: pointer;
+}
+
+
+
+@keyframes spining{
+    0% { 
+        top: 0px; 
+    }
+    50%{
+        top: 500px;
+    }
+    100% { 
+       top: 0px; 
+    }
+}
+
+#loader{
+    animation-name: spining;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    width: 300px;
+    height: 300px;
+    background-color: green;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    display: none;
+}
+
+.info{
+    overflow: scroll;
+    transition: 200ms;
+    transform: scale(0);
+    top: 0px;
+    left: 0;
+    max-width: 500px;
+    position:fixed;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, .8);
+    border: 1px white dotted;
+}
+.info.active{
+    overflow: scroll;
+    top: 80px;
+    margin-left: 10px;
+    transition: 300ms;
+    background-color: black;
+    padding: 10px;
+    transform: scale(1);
+    position:fixed;
+    border: 1px white dotted;
+}
+
+.title{
+    margin: 20px;
+}
+
+@keyframes fade{
+    0%{
+        opacity: 100%;
+    }
+    50%{
+        opacity: 100%;
+    }
+    100%{
+        opacity: 0%;
+    }
+}
+
+#preloader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin:0;
+    background-color: black;
+    color: white;
+    position: fixed;
+    z-index: 9998;
+
+}
+
+.preloader-info{
+    width:400px;
+    text-align: center;
+    padding: 30px;
 }

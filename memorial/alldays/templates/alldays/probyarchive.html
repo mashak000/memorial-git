@@ -1,0 +1,172 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title> TEST</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link href="{% static 'alldays/styles.css' %}" rel="stylesheet">
+        <script src="{% static 'alldays/main.js' %}" defer></script>
+
+    </head>
+    <body>
+        
+        <script>
+            // random position at the start
+            function randomposition(){
+                var image = event.target;
+                var w = window.innerWidth;
+                image.style.top = Math.random() * 3000 + "px";
+                image.style.left = Math.random() * w + "px";
+            }
+        </script>
+
+        <div class="info-dblclick">
+            <h6>what to do?</h6>
+            <p>1. press and move around<br>
+            2. double click on any listik<br>
+            to see in full size</p>
+        </div>
+
+        <!-- preloader -->
+        <div id="loader">
+            <h2 id="puk">FEW SECONDS PLEASE</h2>
+        </div>
+       
+        {% for _ in names %}
+            {% for name in names %}
+                <a href="" onclick="prevent(event)" ondblclick="openLink('{{name}}')" data-toggle="modal"><img id="list_{{ name }}"  style="position:absolute;" class="list" src="{{low}}/{{name}}" onload="randomposition()" onmousedown="dragElement()"> </a>
+                
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div style="margin:auto; margin-top:50px; margin-left:auto" class="modal-dialog modal-lg" role="document">
+                         
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <img id="modalimage" src="{{highquality}}/" style="width:500px;" loading="lazy">
+
+                                <div id="myData" data-days="{{ days }}"></div>
+                                <h6 id="author"></h6>
+                                {% for day in days %}
+                                    <div id="info_{{day.filename}}" class="infocard">
+                                        <h6>author: {{day.name}}</h6>
+                                        <p>description: {{day.description}}</p>
+                                    </div>
+                                {% endfor %}
+                                
+                                                 
+                            </div>
+                            <div class="modal-footer">
+                                <button id="closebtn" type="button" class="btn btn-outline-secondary" data-dismiss="modal" onclick="clear()">Close</button>
+                                <button type="button" class="btn btn-outline-primary">Donate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <!--BOOTSTRAP modal
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div style="margin:auto; margin-top:50px; margin-left:auto" class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img id="modalimage" src="{{highquality}}/" style="width:500px;" loading="lazy">
+
+                     
+                        <div class="info">
+                            <h6 id="author"></h6>
+                            <p id="description"></p>
+                            <p>inst: <a id="inst" href="" target="_blank"></a></p>
+                        </div>
+                        
+
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closebtn" type="button" class="btn btn-outline-secondary" data-dismiss="modal" onclick="clear()">Close</button>
+                        <button type="button" class="btn btn-outline-primary">Donate</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        
+    </body>
+    <script>
+        function openLink(name){
+            $("#modalimage").attr("src", parent + name);
+            document.getElementById(`info_${name}`).style.display = 'block';
+            $('#exampleModal').modal('show');
+
+            
+            $("body").click(function(event){
+                var t = event.target;
+                console.log(t);
+                if (t == document.getElementsByClassName("modal-content")){
+                    document.getElementById(`info_${name}`).style.display = 'none';
+                } 
+            });
+
+        }
+
+    </script>
+
+</html>
+
+<script>
+        function openLink(name){
+            fetch(`/tablesdb/${name}`)
+            .then(response => response.json())
+            .then(newday => {
+                var content = JSON.parse(newday);
+                content = content[0]['fields']
+                console.log(content);
+                
+                console.log(`${newday}`);
+                $('#author').html(`${content.name}`);
+                $('#description').html(`${newday.description}`);
+                $("#modalimage").attr("src", parent + name);
+                $('#exampleModal').modal('show');
+            })
+        }
+</script>
+
+
+<!-- with google API ONLY with preloader -->
+<script>
+    function openLink(name){
+            loader.style.display = 'flex';
+            fetch(`/tables/${name}`)
+            .then(response => response.json())
+            .then(newday => {
+                loader.style.display = 'none';
+                console.log(`${newday}`);
+                $('#author').html(`${newday.name}`);
+                $('#description').html(`${newday.description}`);
+                $("#modalimage").attr("src", parent + name);
+                $('#exampleModal').modal('show');
+            })
+        }
+</script>
+
+
+<script>
+    //preloader without button
+    window.addEventListener('load', function () {
+        const preloader = document.getElementById('preloader');
+        setTimeout(() => {
+            const fadeEffect = setInterval(() => {
+                if (!preloader.style.opacity) {
+                preloader.style.opacity = 1;
+                }
+                if (preloader.style.opacity > 0) {
+                preloader.style.opacity -= 0.05;
+                } else {
+                clearInterval(fadeEffect);
+                }
+            }, 20);
+        }, 3000);
+    });
+</script>
